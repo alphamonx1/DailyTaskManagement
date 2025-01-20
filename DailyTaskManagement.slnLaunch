@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "Run API and Views",
+    "Projects": [
+      {
+        "Path": "DailyTaskManagement.APIs\\DailyTaskManagement.APIs.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "DailyTaskManagement.Views\\DailyTaskManagement.Views.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
