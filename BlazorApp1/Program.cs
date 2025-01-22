@@ -1,14 +1,11 @@
-using DailyTaskManagement.Infrastructure;
-using DailyTaskManagement.Views.Components;
-using MudBlazor.Services;
+using BlazorApp1.Components;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-builder.Services.AddPersistence(builder.Configuration);
-builder.Services.AddServerSideBlazor();
-builder.Services.AddMudServices();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

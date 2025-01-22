@@ -1,4 +1,4 @@
-﻿namespace DailyTaskManagement.Application.DTOs
+﻿namespace DailyTaskManagement.Application.DTOs.TodoItem
 {
     public class TodoItemDto
     {

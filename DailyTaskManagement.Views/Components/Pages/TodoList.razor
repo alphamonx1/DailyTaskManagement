@@ -1,9 +1,10 @@
 ﻿@page "/"
-@using DailyTaskManagement.Application.DTOs
+@using DailyTaskManagement.Application.DTOs.TodoItem
 @using DailyTaskManagement.Application.Services.TodoItem
+
 @inject ITodoItemService todoService
 
-<h3>Todo List</h3>
+<h3>Task Board</h3>
 
 @if (todoItems == null)
 {
@@ -17,49 +18,47 @@ else
 {
     <div class="todo-container">
         <!-- New -->
-        <div class="todo-column"
-             ondragover="event.preventDefault()"
-             ondrop="OnDrop(event, 'New')">
-            <h4>New</h4>
+        <div class="todo-column">
+            <h4 class="text-neutral-700">New</h4>
             <ul>
                 @foreach (var todo in todoItems.Where(t => t.ItemStatus == "New"))
                 {
-                    <li draggable="true"
-                        ondragstart="OnDragStart(event, @todo.Id)">
-                        @todo.ItemName
+                    <li draggable="true">
+                        @todo.ItemName <br />
+                        <MudButton @onclick="() => StartDoingTaskAsync(todo)">Start</MudButton>
                     </li>
+
                 }
             </ul>
         </div>
 
         <!-- Active -->
-        <div class="todo-column"
-             ondragover="event.preventDefault()"
-             ondrop="OnDrop(event, 'Active')">
+        <div class="todo-column">
             <h4>Active</h4>
             <ul>
                 @foreach (var todo in todoItems.Where(t => t.ItemStatus == "Active"))
                 {
-                    <li draggable="true"
-                        ondragstart="OnDragStart(event, @todo.Id)">
-                        @todo.ItemName
+                    <li draggable="true">
+                        @todo.ItemName <br />
+                        <MudButton @onclick="() => StopDoingTaskAsync(todo)">Stop</MudButton>
+                        <MudButton @onclick="() => CompleteTaskAsync(todo)">Done</MudButton>
                     </li>
+
                 }
             </ul>
         </div>
 
         <!-- Completed -->
-        <div class="todo-column"
-             ondragover="event.preventDefault()"
-             ondrop="OnDrop(event, 'Completed')">
+        <div class="todo-column">
             <h4>Completed</h4>
             <ul>
                 @foreach (var todo in todoItems.Where(t => t.ItemStatus == "Completed"))
                 {
-                    <li draggable="true"
-                        ondragstart="OnDragStart(event, @todo.Id)">
-                        @todo.ItemName
+                    <li draggable="true">
+                        @todo.ItemName <br />
+                        <MudButton @onclick="() => StopDoingTaskAsync(todo)">Back</MudButton>
                     </li>
+
                 }
             </ul>
         </div>
@@ -74,74 +73,37 @@ else
         todoItems = await todoService.GetAllTodoItemAsync();
     }
 
-    private string draggedItemId;
-
-    private void OnDragStart(DragEventArgs e, string id)
+    public async Task<int> StartDoingTaskAsync(TodoItemDto todoItemDto)
     {
-        draggedItemId = id;
+        var result = await todoService.UpdateTodoItemStatusByIdAsync(todoItemDto.Id, 2);
+        await RefreshDataAsync();
+        return result;
     }
 
-    private void OnDrop(DragEventArgs e, string newStatus)
+    public async Task<int> StopDoingTaskAsync(TodoItemDto todoItemDto)
     {
-        var item = todoItems.FirstOrDefault(t => t.Id == draggedItemId);
-        if (item != null)
-        {
-            item.ItemStatus = newStatus;
-        }
-        draggedItemId = ""; // Reset dragged item
+        var result = await todoService.UpdateTodoItemStatusByIdAsync(todoItemDto.Id, 1);
+        await RefreshDataAsync();
+        return result;
+    }
+
+    public async Task<int> CompleteTaskAsync(TodoItemDto todoItemDto)
+    {
+        var result = await todoService.UpdateTodoItemStatusByIdAsync(todoItemDto.Id, 3);
+        await RefreshDataAsync(); ;
+        return result;
+    }
+
+    private async Task RefreshDataAsync()
+    {
+        todoItems = await todoService.GetAllTodoItemAsync();
+        StateHasChanged();
     }
 }
 
+
+
 <style>
-    .todo-container {
-        display: flex;
-        justify-content: space-around;
-        position: relative; /* Để pseudo-element hoạt động */
-    }
-
-    .todo-column {
-        flex: 1;
-        margin: 10px;
-        padding: 10px;
-        text-align: center;
-        position: relative;
-    }
-
-        /* Đường kẻ dọc */
-        .todo-column:not(:last-child)::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            width: 1px;
-            background-color: #ccc;
-        }
-    h4 {
-        text-align: center;
-        border-bottom: 2px solid #ccc;
-        margin-bottom: 10px;
-        padding-bottom: 5px;
-    }
-
-    ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    li {
-        margin: 5px 0;
-        padding: 5px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        background-color: #f9f9f9;
-    }
-
-        li:hover {
-            background-color: #f0f0f0;
-        }
-
     .todo-container {
         display: flex;
         justify-content: space-around;
@@ -155,23 +117,36 @@ else
         border-radius: 5px;
         background-color: #f9f9f9;
         min-height: 150px;
+        transition: background-color 0.3s ease;
     }
 
         .todo-column:hover {
             background-color: #e8e8e8;
         }
 
-    li {
-        margin: 5px 0;
-        padding: 5px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        background-color: #ffffff;
-        cursor: grab;
+        .todo-column ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .todo-column li {
+            padding: 10px;
+            margin: 5px 0;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: grab;
+        }
+
+            .todo-column li:active {
+                cursor: grabbing;
+                opacity: 0.7;
+            }
+
+    .todo-column {
+        transition: background-color 0.3s ease;
     }
 
-        li:active {
-            cursor: grabbing;
-            opacity: 0.8;
-        }
+        .todo-column.drag-over {
+            background-color: #d1ffd6;
 </style>

@@ -6,5 +6,10 @@ namespace DailyTaskManagement.Domain.Entities
     {
         public string? ItemStatusName { get; set; }
         public required ICollection<TodoItem> TodoItems { get; set; }
+
+        public ItemStatus()
+        {
+            TodoItems = [];
+        }
     }
 }

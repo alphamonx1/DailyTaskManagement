@@ -7,7 +7,7 @@ namespace DailyTaskManagement.Infrastructure.DailyTaskDbContext
     public class DailyTaskManagementDbContext(DbContextOptions<DailyTaskManagementDbContext> options) : DbContext(options), IDailyTaskManagementDbContext
     {
         public DbSet<TodoItem> TodoItem { get; set; }
-        public DbSet<ItemStatus> TtemStatuses { get; set; }
+        public DbSet<ItemStatus> ItemStatus { get; set; }
 
         public Task<int> SaveChangeAsync()
         {

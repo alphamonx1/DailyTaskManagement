@@ -1,5 +1,5 @@
 ﻿using DailyTaskManagement.Application.DbContext;
-using DailyTaskManagement.Application.DTOs;
+using DailyTaskManagement.Application.DTOs.TodoItem;
 using DailyTaskManagement.Application.Repositories.TodoItem;
 using Microsoft.EntityFrameworkCore;
 
@@ -40,6 +40,21 @@ namespace DailyTaskManagement.Infrastructure.Persistence.Repositories.TodoItem
                     ItemName= todoItemDb.ItemName,
                     ItemStatus = todoItemDb.ItemStatus.ItemStatusName
                 };
+        }
+
+        public async Task<int> UpdateTodoItemStatusByIdAsync(string id, int newStatus)
+        {
+            var updateItem = await _dbContext.TodoItem.FirstOrDefaultAsync(item => item.Id == id);
+            if(updateItem != null)
+            {
+                if(newStatus is not 0)
+                {
+                    updateItem.ItemStatusId = newStatus;
+                    await _dbContext.SaveChangeAsync();
+                    return 1;
+                }
+            }
+            return 0;
         }
     }
 }

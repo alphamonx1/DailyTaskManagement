@@ -1,4 +1,4 @@
-﻿using DailyTaskManagement.Application.DTOs;
+﻿using DailyTaskManagement.Application.DTOs.TodoItem;
 using DailyTaskManagement.Application.Repositories.TodoItem;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +20,12 @@ namespace DailyTaskManagement.APIs.Controllers
         public async Task<ActionResult<TodoItemDto>> GetItemByIdAsync(string id)
         {
             return await _todoItemRepository.GetItemByIdAsync(id);   
+        }
+
+        [HttpPut("id")]
+        public async Task<int> UpdateItemStatusByIdAsync(string id, [FromQuery] int status)
+        {
+            return await _todoItemRepository.UpdateTodoItemStatusByIdAsync($"{id}", status);
         }
     }
 }

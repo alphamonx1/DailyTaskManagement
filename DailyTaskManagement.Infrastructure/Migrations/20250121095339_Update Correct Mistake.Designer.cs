@@ -3,6 +3,7 @@ using DailyTaskManagement.Infrastructure.DailyTaskDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DailyTaskManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(DailyTaskManagementDbContext))]
-    partial class DailyTaskManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250121095339_Update Correct Mistake")]
+    partial class UpdateCorrectMistake
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace DailyTaskManagement.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ItemStatus");
+                    b.ToTable("ItemStatuses");
                 });
 
             modelBuilder.Entity("DailyTaskManagement.Domain.Entities.TodoItem", b =>

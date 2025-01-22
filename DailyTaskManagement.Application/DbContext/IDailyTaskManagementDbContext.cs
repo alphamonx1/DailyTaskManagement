@@ -6,7 +6,7 @@ namespace DailyTaskManagement.Application.DbContext
     public interface IDailyTaskManagementDbContext
     {
         DbSet<TodoItem> TodoItem {  get; set; }
-        DbSet<ItemStatus> TtemStatuses { get; set; }
+        DbSet<ItemStatus> ItemStatus { get; set; }
 
         Task<int> SaveChangeAsync();
 
