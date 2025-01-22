@@ -13,6 +13,16 @@ namespace DailyTaskManagement.Infrastructure.Services.TodoItem
             _httpClient = httpClient;
         }
 
+        public async Task<int> CreateNewTodoItemAsync(CreateTodoItemDto item)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/TodoItem", item);
+            if (response.IsSuccessStatusCode)
+            {
+                return 1;
+            }
+            return 0;
+        }
+
         public async Task<List<TodoItemDto>> GetAllTodoItemAsync()
         {
             var response = await _httpClient.GetFromJsonAsync<List<TodoItemDto>>("api/TodoItem"); // Replace with your endpoint

@@ -9,9 +9,16 @@ namespace DailyTaskManagement.Infrastructure.Persistence.Repositories.TodoItem
     {
         private readonly IDailyTaskManagementDbContext _dbContext = dbContext;
 
-        public Task<int> CreateNewItemTodoAsync(TodoItemDto item)
+        public async Task<int> CreateNewItemTodoAsync(CreateTodoItemDto item)
         {
-            throw new NotImplementedException();
+            var newtodoItem = new Domain.Entities.TodoItem()
+            {
+                Id = item.ItemId,
+                ItemName = item.ItemName,
+                ItemStatusId = 1
+            };
+            await _dbContext.TodoItem.AddAsync(newtodoItem);
+            return await _dbContext.SaveChangeAsync();
         }
 
         public async Task<List<TodoItemDto>> GetAllItemAsync()

@@ -1,0 +1,39 @@
+﻿@using DailyTaskManagement.Application.DTOs.TodoItem
+@using DailyTaskManagement.Application.Services.TodoItem
+
+@inject ITodoItemService todoService
+@inject NavigationManager NavigationManager
+
+@page "/todo/create"
+
+<h3>CreateNewTask</h3>
+<div>
+    <label>Task Id: </label>
+    <input @bind="newTodoItem.ItemId" placeholder="Enter Task Id" />
+</div>
+<div>
+    <label>Task Name: </label>
+    <input @bind="newTodoItem.ItemName" placeholder="Enter Task Name" />
+</div>
+<button @onclick="CreateTodoItem" class="btn btn-primary">Create</button>
+
+<p>@ResultMessage</p>
+@code {
+    private CreateTodoItemDto newTodoItem = new CreateTodoItemDto();
+    private string ResultMessage = string.Empty;
+
+    private async Task CreateTodoItem()
+    {
+        var result = await todoService.CreateNewTodoItemAsync(newTodoItem);
+        if (result > 0)
+        {
+            ResultMessage = "Task created successfully!";
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            ResultMessage = "Task creation failed!";
+        }
+    }
+    
+}

@@ -22,6 +22,12 @@ namespace DailyTaskManagement.APIs.Controllers
             return await _todoItemRepository.GetItemByIdAsync(id);   
         }
 
+        [HttpPost]
+        public async Task<int> CreateNewItemTodoAsync([FromBody] CreateTodoItemDto item)
+        {
+            return await _todoItemRepository.CreateNewItemTodoAsync(item);
+        }
+
         [HttpPut("id")]
         public async Task<int> UpdateItemStatusByIdAsync(string id, [FromQuery] int status)
         {

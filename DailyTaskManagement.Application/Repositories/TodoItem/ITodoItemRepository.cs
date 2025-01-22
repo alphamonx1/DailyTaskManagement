@@ -8,6 +8,6 @@ namespace DailyTaskManagement.Application.Repositories.TodoItem
         public Task<TodoItemDto> GetItemByIdAsync(string id);
 
         public Task<int> UpdateTodoItemStatusByIdAsync(string id, int newStatus);
-        public Task<int> CreateNewItemTodoAsync(TodoItemDto item);
+        public Task<int> CreateNewItemTodoAsync(CreateTodoItemDto item);
     }
 }

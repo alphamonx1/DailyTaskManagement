@@ -7,6 +7,6 @@ namespace DailyTaskManagement.Domain.Entities
         public string? ItemName { get; set; }
         public int ItemStatusId { get; set; }
 
-        public required ItemStatus ItemStatus { get; set; }
+        public ItemStatus? ItemStatus { get; set; }
     }
 }
